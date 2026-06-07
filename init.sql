@@ -1,95 +1,56 @@
-CREATE DATABASE biblioteca_api;
 
-USE biblioteca_api;
+USE hotel_management;
 
--- =====================================
--- TABELA DE AUTORES
--- =====================================
-
-CREATE TABLE autor (
-                       id BIGINT PRIMARY KEY AUTO_INCREMENT,
-                       nome VARCHAR(100) NOT NULL,
-                       nacionalidade VARCHAR(50)
+CREATE TABLE guests (
+                        guest_id INT AUTO_INCREMENT PRIMARY KEY,
+                        full_name VARCHAR(150) NOT NULL,
+                        document_number VARCHAR(20) NOT NULL UNIQUE,
+                        birth_date DATE NOT NULL,
+                        email VARCHAR(150) NOT NULL UNIQUE,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- =====================================
--- TABELA DE CATEGORIAS
--- =====================================
-
-CREATE TABLE categoria (
-                           id BIGINT PRIMARY KEY AUTO_INCREMENT,
-                           nome VARCHAR(50) NOT NULL
+CREATE TABLE rooms (
+                       room_id INT AUTO_INCREMENT PRIMARY KEY,
+                       room_number VARCHAR(10) NOT NULL UNIQUE,
+                       category VARCHAR(100) NOT NULL COMMENT 'Ex: Premium Suite - 2 beds',
+                       base_daily_rate DECIMAL(10, 2) NOT NULL,
+                       status ENUM('Available', 'Occupied', 'Maintenance') DEFAULT 'Available'
 );
 
--- =====================================
--- TABELA DE LIVROS
--- =====================================
+CREATE TABLE reservations (
+                              reservation_id INT AUTO_INCREMENT PRIMARY KEY,
+                              guest_id INT NOT NULL,
+                              room_id INT NOT NULL,
+                              expected_check_in_date DATE NOT NULL,
+                              expected_check_out_date DATE NOT NULL,
+                              applied_daily_rate DECIMAL(10, 2) NOT NULL COMMENT 'Locks the price at the time of booking',
+                              status ENUM('Scheduled', 'Checked-in', 'Checked-out', 'Cancelled') DEFAULT 'Scheduled',
+                              notes TEXT,
+                              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                              updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-CREATE TABLE livro (
-                       id BIGINT PRIMARY KEY AUTO_INCREMENT,
-                       titulo VARCHAR(150) NOT NULL,
-                       ano_publicacao INT,
-                       quantidade INT,
-                       autor_id BIGINT,
-                       categoria_id BIGINT,
-
-                       CONSTRAINT fk_autor
-                           FOREIGN KEY (autor_id)
-                               REFERENCES autor(id),
-
-                       CONSTRAINT fk_categoria
-                           FOREIGN KEY (categoria_id)
-                               REFERENCES categoria(id)
+                              FOREIGN KEY (guest_id) REFERENCES guests(guest_id) ON DELETE RESTRICT,
+                              FOREIGN KEY (room_id) REFERENCES rooms(room_id) ON DELETE RESTRICT
 );
 
--- =====================================
--- INSERTS AUTORES
--- =====================================
+CREATE TABLE room_charges (
+                              charge_id INT AUTO_INCREMENT PRIMARY KEY,
+                              reservation_id INT NOT NULL,
+                              category ENUM('Minibar', 'Restaurant', 'Laundry', 'Other') NOT NULL,
+                              description VARCHAR(255) NOT NULL,
+                              amount DECIMAL(10, 2) NOT NULL,
+                              recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-INSERT INTO autor (nome, nacionalidade) VALUES
-                                            ('Machado de Assis', 'Brasileiro'),
-                                            ('Clarice Lispector', 'Brasileira'),
-                                            ('J. K. Rowling', 'Britânica'),
-                                            ('George Orwell', 'Britânico'),
-                                            ('J. R. R. Tolkien', 'Britânico'),
-                                            ('Stephen King', 'Americano'),
-                                            ('Agatha Christie', 'Britânica'),
-                                            ('Paulo Coelho', 'Brasileiro'),
-                                            ('Dan Brown', 'Americano'),
-                                            ('C. S. Lewis', 'Britânico');
+                              FOREIGN KEY (reservation_id) REFERENCES reservations(reservation_id) ON DELETE CASCADE
+);
 
--- =====================================
--- INSERTS CATEGORIAS
--- =====================================
+CREATE TABLE payments (
+                          payment_id INT AUTO_INCREMENT PRIMARY KEY,
+                          reservation_id INT NOT NULL,
+                          payment_timing ENUM('Check-in', 'Check-out') NOT NULL,
+                          amount_paid DECIMAL(10, 2) NOT NULL,
+                          payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-INSERT INTO categoria (nome) VALUES
-                                 ('Romance'),
-                                 ('Fantasia'),
-                                 ('Terror'),
-                                 ('Ficção Científica'),
-                                 ('Mistério'),
-                                 ('Drama'),
-                                 ('Aventura'),
-                                 ('Suspense'),
-                                 ('Literatura Brasileira'),
-                                 ('Infantil');
-
--- =====================================
--- INSERTS LIVROS
--- =====================================
-
-INSERT INTO livro
-(titulo, ano_publicacao, quantidade, autor_id, categoria_id)
-VALUES
-    ('Dom Casmurro', 1899, 5, 1, 9),
-    ('A Hora da Estrela', 1977, 3, 2, 6),
-    ('Harry Potter e a Pedra Filosofal', 1997, 10, 3, 2),
-    ('1984', 1949, 4, 4, 4),
-    ('O Senhor dos Anéis', 1954, 7, 5, 2),
-    ('It: A Coisa', 1986, 2, 6, 3),
-    ('Assassinato no Expresso do Oriente', 1934, 6, 7, 5),
-    ('O Alquimista', 1988, 8, 8, 1),
-    ('Código Da Vinci', 2003, 9, 9, 8),
-    ('As Crônicas de Nárnia', 1950, 5, 10, 10);
-
-select * from livro;
+                          FOREIGN KEY (reservation_id) REFERENCES reservations(reservation_id) ON DELETE CASCADE
+);
