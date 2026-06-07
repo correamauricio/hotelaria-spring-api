@@ -1,4 +1,3 @@
-CREATE DATABASE biblioteca_api;
 
 USE biblioteca_api;
 
