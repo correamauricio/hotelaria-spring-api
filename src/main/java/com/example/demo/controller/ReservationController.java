@@ -1,31 +1,31 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Reserva;
+import com.example.demo.model.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.service.ReservaService;
+import com.example.demo.service.ReservationService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/reservas")
-public class ReservaController {
+public class ReservationController {
 
     @Autowired
-    private ReservaService reservaService;
+    private ReservationService reservationService;
 
 
     //Rota para criar uma nova RESERVA
     @PostMapping
-    public ResponseEntity<?> criarNovaReserva(@RequestBody Reserva novaReserva){
+    public ResponseEntity<?> createReservation(@RequestBody Reservation newReservation){
        try{
            //Regra de conflito
-           Reserva reservaSalva = reservaService.criarReserva(novaReserva);
+           Reservation savedReservation = reservationService.createReservation(newReservation);
 
            //devolve o JSON da reserva Status 201 (created)
-           return ResponseEntity.status(HttpStatus.CREATED).body(reservaSalva);
+           return ResponseEntity.status(HttpStatus.CREATED).body(savedReservation);
 
        }catch (IllegalArgumentException | IllegalStateException e){
 
@@ -35,25 +35,22 @@ public class ReservaController {
     }
 
     @PostMapping("/{id}/checkin")
-    public ResponseEntity<?> realizarCheckin(@PathVariable int id){
+    public ResponseEntity<?> doCheckIn(@PathVariable Long id){
         try{
-
-            Reserva reservaAtualizada = reservaService.fazerCheckIn(id);
-
-            return ResponseEntity.ok(reservaAtualizada);
+            Reservation updateReservation = reservationService.DoCheckIn(id);
+            return ResponseEntity.ok(updateReservation);
 
         }catch (IllegalArgumentException | IllegalStateException e){
-
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PostMapping("/{id}/checkout")
-    public ResponseEntity<?> realizarCheckout(@PathVariable int id){
+    public ResponseEntity<?> doCheckOut(@PathVariable Long id){
         try{
-            Reserva reservaAtualizada = reservaService.fazerCheckOut(id);
+            Reservation updateReservation = reservationService.DoCheckOut(id);
 
-            return ResponseEntity.ok(reservaAtualizada);
+            return ResponseEntity.ok(updateReservation);
 
         }catch (IllegalArgumentException | IllegalStateException e){
 
@@ -61,10 +58,8 @@ public class ReservaController {
         }
     }
 
-
     @GetMapping
-    public List<Reserva> listarTodasReservas(){
-
-        return reservaService.listaTodas();
+    public ResponseEntity<List<Reservation>> listAll(){
+        return ResponseEntity.ok(reservationService.listAll());
     }
 }
