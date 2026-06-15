@@ -1,7 +1,7 @@
 
 USE hotel_management;
 
-CREATE TABLE guests (
+CREATE TABLE guest (
                         guest_id INT AUTO_INCREMENT PRIMARY KEY,
                         full_name VARCHAR(150) NOT NULL,
                         document_number VARCHAR(20) NOT NULL UNIQUE,
@@ -10,7 +10,7 @@ CREATE TABLE guests (
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE rooms (
+CREATE TABLE room (
                        room_id INT AUTO_INCREMENT PRIMARY KEY,
                        room_number VARCHAR(10) NOT NULL UNIQUE,
                        category VARCHAR(100) NOT NULL COMMENT 'Ex: Premium Suite - 2 beds',
@@ -18,7 +18,7 @@ CREATE TABLE rooms (
                        status ENUM('Available', 'Occupied', 'Maintenance') DEFAULT 'Available'
 );
 
-CREATE TABLE reservations (
+CREATE TABLE reservation (
                               reservation_id INT AUTO_INCREMENT PRIMARY KEY,
                               guest_id INT NOT NULL,
                               room_id INT NOT NULL,
@@ -30,11 +30,11 @@ CREATE TABLE reservations (
                               created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                               updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-                              FOREIGN KEY (guest_id) REFERENCES guests(guest_id) ON DELETE RESTRICT,
-                              FOREIGN KEY (room_id) REFERENCES rooms(room_id) ON DELETE RESTRICT
+                              FOREIGN KEY (guest_id) REFERENCES guest(guest_id) ON DELETE RESTRICT,
+                              FOREIGN KEY (room_id) REFERENCES room(room_id) ON DELETE RESTRICT
 );
 
-CREATE TABLE room_charges (
+CREATE TABLE room_charge (
                               charge_id INT AUTO_INCREMENT PRIMARY KEY,
                               reservation_id INT NOT NULL,
                               category ENUM('Minibar', 'Restaurant', 'Laundry', 'Other') NOT NULL,
@@ -42,24 +42,23 @@ CREATE TABLE room_charges (
                               amount DECIMAL(10, 2) NOT NULL,
                               recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-                              FOREIGN KEY (reservation_id) REFERENCES reservations(reservation_id) ON DELETE CASCADE
+                              FOREIGN KEY (reservation_id) REFERENCES reservation(reservation_id) ON DELETE CASCADE
 );
 
-CREATE TABLE payments (
+CREATE TABLE payment (
                           payment_id INT AUTO_INCREMENT PRIMARY KEY,
                           reservation_id INT NOT NULL,
                           payment_timing ENUM('Check-in', 'Check-out') NOT NULL,
                           amount_paid DECIMAL(10, 2) NOT NULL,
                           payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-                          FOREIGN KEY (reservation_id) REFERENCES reservations(reservation_id) ON DELETE CASCADE
+                          FOREIGN KEY (reservation_id) REFERENCES reservation(reservation_id) ON DELETE CASCADE
 );
-USE hotel_management;
 
 -- --------------------------------------------------------
 -- 1. Inserindo Hóspedes (Guests)
 -- --------------------------------------------------------
-INSERT INTO guests (full_name, document_number, birth_date, email) VALUES
+INSERT INTO guest (full_name, document_number, birth_date, email) VALUES
                                                                        ('João da Silva', '12345678901', '1985-04-12', 'joao.silva@example.com'),
                                                                        ('Maria Oliveira', '98765432100', '1990-08-25', 'maria.oliveira@example.com'),
                                                                        ('Carlos Eduardo Santos', '45612378922', '1978-11-03', 'carlos.santos@example.com'),
@@ -69,7 +68,7 @@ INSERT INTO guests (full_name, document_number, birth_date, email) VALUES
 -- --------------------------------------------------------
 -- 2. Inserindo Quartos (Rooms)
 -- --------------------------------------------------------
-INSERT INTO rooms (room_number, category, base_daily_rate, status) VALUES
+INSERT INTO room (room_number, category, base_daily_rate, status) VALUES
                                                                        ('101', 'Standard Room - 1 Queen bed', 150.00, 'Available'),
                                                                        ('102', 'Standard Room - 2 Twin beds', 140.00, 'Maintenance'),
                                                                        ('201', 'Deluxe Room - 1 King bed', 250.00, 'Available'),
@@ -81,7 +80,7 @@ INSERT INTO rooms (room_number, category, base_daily_rate, status) VALUES
 -- 3. Inserindo Reservas (Reservations)
 -- As datas e taxas foram baseadas nos quartos acima
 -- --------------------------------------------------------
-INSERT INTO reservations (guest_id, room_id, expected_check_in_date, expected_check_out_date, applied_daily_rate, status, notes) VALUES
+INSERT INTO reservation (guest_id, room_id, expected_check_in_date, expected_check_out_date, applied_daily_rate, status, notes) VALUES
 -- Reserva 1: Já finalizada (Checked-out)
 (1, 1, '2023-10-01', '2023-10-05', 145.00, 'Checked-out', 'Hóspede pediu travesseiros extras.'),
 
@@ -101,7 +100,7 @@ INSERT INTO reservations (guest_id, room_id, expected_check_in_date, expected_ch
 -- 4. Inserindo Consumos (Room Charges)
 -- Associados apenas às reservas que já fizeram Check-in ou Check-out
 -- --------------------------------------------------------
-INSERT INTO room_charges (reservation_id, category, description, amount) VALUES
+INSERT INTO room_charge (reservation_id, category, description, amount) VALUES
                                                                              (1, 'Minibar', '2x Água mineral, 1x Cerveja Artesanal', 35.00),
                                                                              (1, 'Restaurant', 'Jantar no restaurante principal', 120.50),
                                                                              (1, 'Laundry', 'Lavagem de terno', 45.00),
@@ -112,7 +111,7 @@ INSERT INTO room_charges (reservation_id, category, description, amount) VALUES
 -- --------------------------------------------------------
 -- 5. Inserindo Pagamentos (Payments)
 -- --------------------------------------------------------
-INSERT INTO payments (reservation_id, payment_timing, amount_paid) VALUES
+INSERT INTO payment (reservation_id, payment_timing, amount_paid) VALUES
 -- Pagamentos da Reserva 1 (Finalizada: diárias + consumo)
 (1, 'Check-in', 290.00),   -- Pagou 50% adiantado
 (1, 'Check-out', 490.50),  -- Pagou restante das diárias (290) + consumos (200.50)
