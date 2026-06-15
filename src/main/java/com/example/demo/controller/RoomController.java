@@ -18,4 +18,12 @@ public class RoomController {
     public List<Room> listAll() {
         return repository.findAll();
     }
+
+    
+    @GetMapping("/{room_id}")
+    public Room findById(@PathVariable("room_id") Long room_id) {
+        return repository.findById(room_id)
+                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(
+                        org.springframework.http.HttpStatus.NOT_FOUND, "Quarto não encontrado"));
+    }
 }
