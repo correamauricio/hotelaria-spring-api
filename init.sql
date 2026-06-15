@@ -10,7 +10,7 @@ CREATE TABLE guests (
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE rooms (
+CREATE TABLE room (
                        room_id INT AUTO_INCREMENT PRIMARY KEY,
                        room_number VARCHAR(10) NOT NULL UNIQUE,
                        category VARCHAR(100) NOT NULL COMMENT 'Ex: Premium Suite - 2 beds',
@@ -69,7 +69,7 @@ INSERT INTO guests (full_name, document_number, birth_date, email) VALUES
 -- --------------------------------------------------------
 -- 2. Inserindo Quartos (Rooms)
 -- --------------------------------------------------------
-INSERT INTO rooms (room_number, category, base_daily_rate, status) VALUES
+INSERT INTO room (room_number, category, base_daily_rate, status) VALUES
                                                                        ('101', 'Standard Room - 1 Queen bed', 150.00, 'Available'),
                                                                        ('102', 'Standard Room - 2 Twin beds', 140.00, 'Maintenance'),
                                                                        ('201', 'Deluxe Room - 1 King bed', 250.00, 'Available'),

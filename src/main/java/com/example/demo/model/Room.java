@@ -1,16 +1,18 @@
 package com.example.demo.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.*;
 
 @Entity
-public class Rooms {
+public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long room_id;
     private String room_number;
     private String category;
-    private float base_daily_rate;
+    private BigDecimal base_daily_rate;
     private String status;
 
     public Long getRoom_id() {
@@ -37,11 +39,11 @@ public class Rooms {
         this.category = category;
     }
 
-    public float getBase_daily_rate() {
+    public BigDecimal getBase_daily_rate() {
         return base_daily_rate;
     }
 
-    public void setBase_daily_rate(float base_daily_rate) {
+    public void setBase_daily_rate(BigDecimal base_daily_rate) {
         this.base_daily_rate = base_daily_rate;
     }
 

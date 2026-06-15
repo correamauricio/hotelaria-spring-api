@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Rooms;
+import com.example.demo.model.Room;
 import com.example.demo.repository.RoomRepository;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -15,7 +15,7 @@ public class RoomController {
     }
 
     @GetMapping
-    public List<Rooms> listAll() {
+    public List<Room> listAll() {
         return repository.findAll();
     }
 }
