@@ -2,22 +2,25 @@ package com.example.demo.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class RoomDTO {
+public class RoomDetailsDTO {
     private Long id;
     private String number;
     private String status;
     
     @JsonProperty("bed_count")
     private Integer bedCount;
+    
+    @JsonProperty("current_guest")
+    private Object currentGuest;
 
-    public RoomDTO() {
-    }
+    public RoomDetailsDTO() {}
 
-    public RoomDTO(Long id, String number, String status, Integer bedCount) {
+    public RoomDetailsDTO(Long id, String number, String status, Integer bedCount) {
         this.id = id;
         this.number = number;
         this.status = status;
         this.bedCount = bedCount;
+        this.currentGuest = null;
     }
 
     public Long getId() {
@@ -50,5 +53,13 @@ public class RoomDTO {
 
     public void setBedCount(Integer bedCount) {
         this.bedCount = bedCount;
+    }
+
+    public Object getCurrentGuest() {
+        return currentGuest;
+    }
+
+    public void setCurrentGuest(Object currentGuest) {
+        this.currentGuest = currentGuest;
     }
 }
