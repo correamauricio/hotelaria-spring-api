@@ -14,6 +14,7 @@ CREATE TABLE room (
                        room_id INT AUTO_INCREMENT PRIMARY KEY,
                        room_number VARCHAR(10) NOT NULL UNIQUE,
                        category VARCHAR(100) NOT NULL COMMENT 'Ex: Premium Suite - 2 beds',
+                       bed_count INT NOT NULL DEFAULT 1,
                        base_daily_rate DECIMAL(10, 2) NOT NULL,
                        status ENUM('Available', 'Occupied', 'Maintenance') DEFAULT 'Available'
 );
@@ -68,13 +69,13 @@ INSERT INTO guest (full_name, document_number, birth_date, email) VALUES
 -- --------------------------------------------------------
 -- 2. Inserindo Quartos (Rooms)
 -- --------------------------------------------------------
-INSERT INTO room (room_number, category, base_daily_rate, status) VALUES
-                                                                       ('101', 'Standard Room - 1 Queen bed', 150.00, 'Available'),
-                                                                       ('102', 'Standard Room - 2 Twin beds', 140.00, 'Maintenance'),
-                                                                       ('201', 'Deluxe Room - 1 King bed', 250.00, 'Available'),
-                                                                       ('202', 'Deluxe Room - 1 King bed + Balcony', 280.00, 'Occupied'),
-                                                                       ('301', 'Premium Suite - 2 beds + Kitchen', 450.00, 'Occupied'),
-                                                                       ('302', 'Presidential Suite', 900.00, 'Available');
+INSERT INTO room (room_number, category, bed_count, base_daily_rate, status) VALUES
+                                                                       ('101', 'Standard Room - 1 Queen bed', 1, 150.00, 'Available'),
+                                                                       ('102', 'Standard Room - 2 Twin beds', 2, 140.00, 'Maintenance'),
+                                                                       ('201', 'Deluxe Room - 1 King bed', 1, 250.00, 'Available'),
+                                                                       ('202', 'Deluxe Room - 1 King bed + Balcony', 1, 280.00, 'Occupied'),
+                                                                       ('301', 'Premium Suite - 2 beds + Kitchen', 2, 450.00, 'Occupied'),
+                                                                       ('302', 'Presidential Suite', 2, 900.00, 'Available');
 
 -- --------------------------------------------------------
 -- 3. Inserindo Reservas (Reservations)

@@ -1,29 +1,26 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Room;
-import com.example.demo.repository.RoomRepository;
+import com.example.demo.dto.RoomDTO;
+import com.example.demo.service.RoomService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/quartos")
+@RequestMapping("/api/rooms")
 public class RoomController {
-    private final RoomRepository repository;
+    private final RoomService roomService;
 
-    public RoomController (RoomRepository repository) {
-        this.repository = repository;
+    public RoomController(RoomService roomService) {
+        this.roomService = roomService;
     }
 
     @GetMapping
-    public List<Room> listAll() {
-        return repository.findAll();
+    public List<RoomDTO> listAll(@RequestParam(required = false) String status) {
+        return roomService.getAllRooms(status);
     }
 
-    
-    @GetMapping("/{room_id}")
-    public Room findById(@PathVariable("room_id") Long room_id) {
-        return repository.findById(room_id)
-                .orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(
-                        org.springframework.http.HttpStatus.NOT_FOUND, "Quarto não encontrado"));
+    @GetMapping("/{id}")
+    public RoomDTO findById(@PathVariable("id") Long id) {
+        return roomService.getRoomDetails(id);
     }
 }

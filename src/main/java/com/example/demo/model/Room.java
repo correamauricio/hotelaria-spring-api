@@ -5,30 +5,41 @@ import java.math.BigDecimal;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "room")
 public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long room_id;
-    private String room_number;
+    @Column(name = "room_id")
+    private Long id;
+
+    @Column(name = "room_number")
+    private String number;
+
     private String category;
-    private BigDecimal base_daily_rate;
+
+    @Column(name = "bed_count")
+    private Integer bedCount;
+
+    @Column(name = "base_daily_rate")
+    private BigDecimal baseDailyRate;
+
     private String status;
 
-    public Long getRoom_id() {
-        return room_id;
+    public Long getId() {
+        return id;
     }
 
-    public void setRoom_id(Long room_id) {
-        this.room_id = room_id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getRoom_number() {
-        return room_number;
+    public String getNumber() {
+        return number;
     }
 
-    public void setRoom_number(String room_number) {
-        this.room_number = room_number;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public String getCategory() {
@@ -39,12 +50,20 @@ public class Room {
         this.category = category;
     }
 
-    public BigDecimal getBase_daily_rate() {
-        return base_daily_rate;
+    public Integer getBedCount() {
+        return bedCount;
     }
 
-    public void setBase_daily_rate(BigDecimal base_daily_rate) {
-        this.base_daily_rate = base_daily_rate;
+    public void setBedCount(Integer bedCount) {
+        this.bedCount = bedCount;
+    }
+
+    public BigDecimal getBaseDailyRate() {
+        return baseDailyRate;
+    }
+
+    public void setBaseDailyRate(BigDecimal baseDailyRate) {
+        this.baseDailyRate = baseDailyRate;
     }
 
     public String getStatus() {
