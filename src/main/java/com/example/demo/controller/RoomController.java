@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.RoomDTO;
+import com.example.demo.dto.RoomSummaryDTO;
+import com.example.demo.dto.RoomDetailsDTO;
 import com.example.demo.service.RoomService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -15,12 +16,12 @@ public class RoomController {
     }
 
     @GetMapping
-    public List<RoomDTO> listAll(@RequestParam(required = false) String status) {
+    public List<RoomSummaryDTO> listAll(@RequestParam(required = false) String status) {
         return roomService.getAllRooms(status);
     }
 
     @GetMapping("/{id}")
-    public RoomDTO findById(@PathVariable("id") Long id) {
+    public RoomDetailsDTO findById(@PathVariable("id") Long id) {
         return roomService.getRoomDetails(id);
     }
 }
