@@ -24,7 +24,9 @@ public class GuestService {
 
     @Transactional
     public GuestResponseDTO createGuest(GuestRequestDTO guestRequestDTO) {
-        if (guestRepository.existsByDocumentNumber(guestRequestDTO.getCpf())) {
+        String sanitizedCpf = guestRequestDTO.getCpf().replaceAll("\\D", "");
+
+        if (guestRepository.existsByDocumentNumber(sanitizedCpf)) {
             throw new IllegalArgumentException("CPF already registered.");
         }
         
@@ -34,7 +36,7 @@ public class GuestService {
 
         Guest guest = new Guest();
         guest.setFullName(guestRequestDTO.getName());
-        guest.setDocumentNumber(guestRequestDTO.getCpf());
+        guest.setDocumentNumber(sanitizedCpf);
         guest.setEmail(guestRequestDTO.getEmail());
         guest.setBirthDate(guestRequestDTO.getBirthDate());
         guest.setCreatedAt(LocalDateTime.now());
