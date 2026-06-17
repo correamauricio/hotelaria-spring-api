@@ -1,12 +1,12 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Reservation;
+import com.example.demo.model.enums.ReservationStatus;
 import com.example.demo.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,7 +34,7 @@ public class ReservationService {
         }
 
         //passou na validação adiciona o status "Scheduled"
-        newReservation.setStatus("Scheduled");
+        newReservation.setStatus(ReservationStatus.SCHEDULED);
         return reservationRepository.save(newReservation);
     }
 
@@ -45,7 +45,7 @@ public class ReservationService {
         for(Reservation existingReservation : AllReservations){
 
             //verifica reservas do mesmo quartos que não foram canceladas
-            if(existingReservation.getRoomId() == roomId && !existingReservation.getStatus().equals("Cancelled") ){
+            if(existingReservation.getRoomId() == roomId && existingReservation.getStatus() != ReservationStatus.CANCELLED ){
 
                 boolean conflict = !intendedStart.isAfter(existingReservation.getExpectedCheckOutDate()) &&
                         !intendedPurpose.isBefore(existingReservation.getExpectedCheckInDate());
@@ -62,11 +62,11 @@ public class ReservationService {
        Reservation reservation = reservationRepository.findById(id)
                .orElseThrow(() -> new IllegalArgumentException("Reservation not found with ID:" + id));
 
-       if (!reservation.getStatus().equals("Scheduled")){
+       if (reservation.getStatus() != ReservationStatus.SCHEDULED){
            throw new IllegalStateException("Check-in can only be made for 'Scheduled' reservations");
        }
 
-       reservation.setStatus("Checked-in");
+       reservation.setStatus(ReservationStatus.IN_PROGRESS);
        return reservationRepository.save(reservation);
     }
 
@@ -74,11 +74,11 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Reservation not found with ID:" + id));
 
-        if(!reservation.getStatus().equals("Checked-in")){
+        if(reservation.getStatus() != ReservationStatus.IN_PROGRESS){
             throw new IllegalStateException("Check-out can only be made for 'Checked-in' reservations.");
         }
 
-        reservation.setStatus("Checked-out");
+        reservation.setStatus(ReservationStatus.COMPLETED);
         return reservationRepository.save(reservation);
 
     }
