@@ -1,29 +1,35 @@
 package com.example.demo.dto;
 
+import com.example.demo.validation.MinimumAge;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
 
 public class GuestRequestDTO {
 
     @NotBlank(message = "Name is required")
+    @Size(min = 2, max = 150, message = "Name must be between 2 and 150 characters")
+    @Pattern(regexp = "^[a-zA-ZÀ-ÿ\\s'-]+$", message = "Name must contain only valid characters")
     private String name;
 
     @NotBlank(message = "CPF is required")
-    @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "Invalid CPF format")
+    @Pattern(regexp = "(^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$)|(^\\d{11}$)", message = "Invalid CPF format")
+    @CPF(message = "Invalid CPF number")
     private String cpf;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
+    @Size(max = 150, message = "Email must not exceed 150 characters")
     private String email;
 
     @NotNull(message = "Birth date is required")
-    @Past(message = "Birth date must be in the past")
+    @MinimumAge(value = 18, message = "Guest must be at least 18 years old")
     @JsonProperty("birth_date")
     private LocalDate birthDate;
 
