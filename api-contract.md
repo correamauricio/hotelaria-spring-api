@@ -50,7 +50,7 @@ Fluxo de hospedagem e reserva:
 | **Tela Correspondente** | **Método HTTP** | **Rota (Endpoint)** | **O que a API Recebe (Request Body)** | **O que a API Devolve (Response)** |
 | --- | --- | --- | --- | --- |
 | Criar Nova Reserva | `POST` | `/api/reservations` | IDs do cliente e quarto, datas e valor. | O recibo da reserva gerado (201 Created). |
-| Fazer Check-in | `POST` | `/api/reservations/{id}/checkin` | O id da reserva na URL. | Status muda para ANDAMENTO (200 OK). |
+| Fazer Check-in | `POST` | `/api/reservations/{id}/checkin` | O id da reserva na URL. | Status muda para IN_PROGRESS (200 OK). |
 | Fazer Check-out | `POST` | `/api/reservations/{id}/checkout` | O id da reserva na URL. | Quarto volta a ficar livre (200 OK). |
 | Buscar Reserva | `GET` | `/api/reservations` | Nada | Retorna Reservas encontradas |
 

@@ -16,7 +16,7 @@ CREATE TABLE room (
                        category VARCHAR(100) NOT NULL COMMENT 'Ex: Premium Suite - 2 beds',
                        bed_count INT NOT NULL DEFAULT 1,
                        base_daily_rate DECIMAL(10, 2) NOT NULL,
-                       status ENUM('Available', 'Occupied', 'Maintenance') DEFAULT 'Available'
+                       status ENUM('AVAILABLE', 'OCCUPIED', 'MAINTENANCE') DEFAULT 'AVAILABLE'
 );
 
 CREATE TABLE reservation (
@@ -26,7 +26,7 @@ CREATE TABLE reservation (
                               expected_check_in_date DATE NOT NULL,
                               expected_check_out_date DATE NOT NULL,
                               applied_daily_rate DECIMAL(10, 2) NOT NULL COMMENT 'Locks the price at the time of booking',
-                              status ENUM('Scheduled', 'Checked-in', 'Checked-out', 'Cancelled') DEFAULT 'Scheduled',
+                              status ENUM('SCHEDULED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED') DEFAULT 'SCHEDULED',
                               notes TEXT,
                               created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                               updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -70,12 +70,12 @@ INSERT INTO guest (full_name, document_number, birth_date, email) VALUES
 -- 2. Inserindo Quartos (Rooms)
 -- --------------------------------------------------------
 INSERT INTO room (room_number, category, bed_count, base_daily_rate, status) VALUES
-                                                                       ('101', 'Standard Room - 1 Queen bed', 1, 150.00, 'Available'),
-                                                                       ('102', 'Standard Room - 2 Twin beds', 2, 140.00, 'Maintenance'),
-                                                                       ('201', 'Deluxe Room - 1 King bed', 1, 250.00, 'Available'),
-                                                                       ('202', 'Deluxe Room - 1 King bed + Balcony', 1, 280.00, 'Occupied'),
-                                                                       ('301', 'Premium Suite - 2 beds + Kitchen', 2, 450.00, 'Occupied'),
-                                                                       ('302', 'Presidential Suite', 2, 900.00, 'Available');
+                                                                       ('101', 'Standard Room - 1 Queen bed', 1, 150.00, 'AVAILABLE'),
+                                                                       ('102', 'Standard Room - 2 Twin beds', 2, 140.00, 'MAINTENANCE'),
+                                                                       ('201', 'Deluxe Room - 1 King bed', 1, 250.00, 'AVAILABLE'),
+                                                                       ('202', 'Deluxe Room - 1 King bed + Balcony', 1, 280.00, 'OCCUPIED'),
+                                                                       ('301', 'Premium Suite - 2 beds + Kitchen', 2, 450.00, 'OCCUPIED'),
+                                                                       ('302', 'Presidential Suite', 2, 900.00, 'AVAILABLE');
 
 -- --------------------------------------------------------
 -- 3. Inserindo Reservas (Reservations)
@@ -83,19 +83,19 @@ INSERT INTO room (room_number, category, bed_count, base_daily_rate, status) VAL
 -- --------------------------------------------------------
 INSERT INTO reservation (guest_id, room_id, expected_check_in_date, expected_check_out_date, applied_daily_rate, status, notes) VALUES
 -- Reserva 1: Já finalizada (Checked-out)
-(1, 1, '2023-10-01', '2023-10-05', 145.00, 'Checked-out', 'Hóspede pediu travesseiros extras.'),
+(1, 1, '2023-10-01', '2023-10-05', 145.00, 'COMPLETED', 'Hóspede pediu travesseiros extras.'),
 
 -- Reserva 2: Em andamento (Checked-in) - Quarto 202 (Ocupado)
-(2, 4, CURRENT_DATE, DATE_ADD(CURRENT_DATE, INTERVAL 3 DAY), 280.00, 'Checked-in', 'Late check-out solicitado para as 14h.'),
+(2, 4, CURRENT_DATE, DATE_ADD(CURRENT_DATE, INTERVAL 3 DAY), 280.00, 'IN_PROGRESS', 'Late check-out solicitado para as 14h.'),
 
 -- Reserva 3: Futura (Scheduled)
-(3, 3, DATE_ADD(CURRENT_DATE, INTERVAL 10 DAY), DATE_ADD(CURRENT_DATE, INTERVAL 15 DAY), 220.00, 'Scheduled', 'Promoção de aniversário aplicada.'),
+(3, 3, DATE_ADD(CURRENT_DATE, INTERVAL 10 DAY), DATE_ADD(CURRENT_DATE, INTERVAL 15 DAY), 220.00, 'SCHEDULED', 'Promoção de aniversário aplicada.'),
 
 -- Reserva 4: Em andamento (Checked-in) - Quarto 301 (Ocupado)
-(4, 5, CURRENT_DATE, DATE_ADD(CURRENT_DATE, INTERVAL 2 DAY), 450.00, 'Checked-in', 'Hóspede com restrição alimentar (sem glúten).'),
+(4, 5, CURRENT_DATE, DATE_ADD(CURRENT_DATE, INTERVAL 2 DAY), 450.00, 'IN_PROGRESS', 'Hóspede com restrição alimentar (sem glúten).'),
 
 -- Reserva 5: Cancelada (Cancelled)
-(5, 6, '2023-11-20', '2023-11-25', 850.00, 'Cancelled', 'Cancelado devido a problemas de saúde.');
+(5, 6, '2023-11-20', '2023-11-25', 850.00, 'CANCELLED', 'Cancelado devido a problemas de saúde.');
 
 -- --------------------------------------------------------
 -- 4. Inserindo Consumos (Room Charges)
