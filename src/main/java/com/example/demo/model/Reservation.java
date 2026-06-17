@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import com.example.demo.model.enums.ReservationStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -28,8 +29,9 @@ public class Reservation {
     @Column(name = "applied_daily_rate", nullable = false)
     private BigDecimal appliedDailyRate;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private ReservationStatus status;
 
     @Column(name = "notes", columnDefinition = "TEXT")
     private String notes;
@@ -94,11 +96,11 @@ public class Reservation {
         this.appliedDailyRate = appliedDailyRate;
     }
 
-    public String getStatus() {
+    public ReservationStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ReservationStatus status) {
         this.status = status;
     }
 
