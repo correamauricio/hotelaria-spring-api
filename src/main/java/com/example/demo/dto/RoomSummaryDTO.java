@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.example.demo.model.enums.RoomStatus;
 
 public class RoomSummaryDTO {
     private Long id;
@@ -8,11 +9,11 @@ public class RoomSummaryDTO {
     @JsonProperty("room_number")
     private String number;
     
-    private String status;
+    private RoomStatus status;
 
     public RoomSummaryDTO() {}
 
-    public RoomSummaryDTO(Long id, String number, String status) {
+    public RoomSummaryDTO(Long id, String number, RoomStatus status) {
         this.id = id;
         this.number = number;
         this.status = status;
@@ -34,11 +35,11 @@ public class RoomSummaryDTO {
         this.number = number;
     }
 
-    public String getStatus() {
+    public RoomStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(RoomStatus status) {
         this.status = status;
     }
 }

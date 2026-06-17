@@ -1,21 +1,22 @@
 package com.example.demo.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.example.demo.model.enums.RoomStatus;
 
 public class RoomDetailsDTO {
     private Long id;
     private String number;
-    private String status;
+    private RoomStatus status;
     
     @JsonProperty("bed_count")
     private Integer bedCount;
     
     @JsonProperty("current_guest")
-    private Object currentGuest;
+    private CurrentGuestDTO currentGuest;
 
     public RoomDetailsDTO() {}
 
-    public RoomDetailsDTO(Long id, String number, String status, Integer bedCount) {
+    public RoomDetailsDTO(Long id, String number, RoomStatus status, Integer bedCount) {
         this.id = id;
         this.number = number;
         this.status = status;
@@ -39,11 +40,11 @@ public class RoomDetailsDTO {
         this.number = number;
     }
 
-    public String getStatus() {
+    public RoomStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(RoomStatus status) {
         this.status = status;
     }
 
@@ -55,11 +56,11 @@ public class RoomDetailsDTO {
         this.bedCount = bedCount;
     }
 
-    public Object getCurrentGuest() {
+    public CurrentGuestDTO getCurrentGuest() {
         return currentGuest;
     }
 
-    public void setCurrentGuest(Object currentGuest) {
+    public void setCurrentGuest(CurrentGuestDTO currentGuest) {
         this.currentGuest = currentGuest;
     }
 }

@@ -3,6 +3,7 @@ package com.example.demo.model;
 import java.math.BigDecimal;
 
 import jakarta.persistence.*;
+import com.example.demo.model.enums.RoomStatus;
 
 @Entity
 @Table(name = "room")
@@ -24,7 +25,8 @@ public class Room {
     @Column(name = "base_daily_rate")
     private BigDecimal baseDailyRate;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private RoomStatus status;
 
     public Long getId() {
         return id;
@@ -66,11 +68,11 @@ public class Room {
         this.baseDailyRate = baseDailyRate;
     }
 
-    public String getStatus() {
+    public RoomStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(RoomStatus status) {
         this.status = status;
     }
 }
