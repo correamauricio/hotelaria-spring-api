@@ -10,7 +10,6 @@ import com.example.demo.model.enums.RoomStatus;
 import com.example.demo.model.enums.ReservationStatus;
 import com.example.demo.repository.RoomRepository;
 import com.example.demo.repository.ReservationRepository;
-import com.example.demo.repository.GuestRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,12 +20,10 @@ import java.util.stream.Collectors;
 public class RoomService {
     private final RoomRepository roomRepository;
     private final ReservationRepository reservationRepository;
-    private final GuestRepository guestRepository;
 
-    public RoomService(RoomRepository roomRepository, ReservationRepository reservationRepository, GuestRepository guestRepository) {
+    public RoomService(RoomRepository roomRepository, ReservationRepository reservationRepository) {
         this.roomRepository = roomRepository;
         this.reservationRepository = reservationRepository;
-        this.guestRepository = guestRepository;
     }
 
     public List<RoomSummaryDTO> getAllRooms(String status) {
@@ -56,12 +53,12 @@ public class RoomService {
         RoomDetailsDTO dto = new RoomDetailsDTO(room.getId(), room.getNumber(), room.getStatus(), room.getBedCount());
 
         if (room.getStatus() == RoomStatus.OCCUPIED) {
-            Optional<Reservation> reservationOpt = reservationRepository.findFirstByRoomIdAndStatus(room.getId().intValue(), ReservationStatus.IN_PROGRESS);
+            Optional<Reservation> reservationOpt = reservationRepository.findFirstByRoomIdAndStatus(room.getId(), ReservationStatus.IN_PROGRESS);
             if (reservationOpt.isPresent()) {
                 Reservation reservation = reservationOpt.get();
-                Optional<Guest> guestOpt = guestRepository.findById((long) reservation.getGuestId());
-                if (guestOpt.isPresent()) {
-                    dto.setCurrentGuest(new CurrentGuestDTO(guestOpt.get().getFullName(), reservation.getExpectedCheckOutDate()));
+                Guest guest = reservation.getGuest();
+                if (guest != null) {
+                    dto.setCurrentGuest(new CurrentGuestDTO(guest.getFullName(), reservation.getExpectedCheckOutDate()));
                 }
             }
         }
