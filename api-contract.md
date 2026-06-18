@@ -65,12 +65,12 @@ Fluxo de hospedagem e reserva:
 },
 // JSON de GET nas reservas
 {
-    "id": 1,
-    "guestId": 1,
-    "roomId": 101,
-    "checkinDate": "2026-06-07",
-    "checkoutDate": "2026-06-08",
-    "totalAmount": 0,
-    "status": "string"
-  }
+  "id": 1,
+  "guest_id": 1,
+  "room_id": 101,
+  "checkin_date": "2026-06-07",
+  "checkout_date": "2026-06-08",
+  "total_amount": 0,
+  "status": "string"
+}
 ```
