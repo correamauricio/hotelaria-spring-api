@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,8 +81,8 @@ public class RoomControllerIntegrationTest {
     @Test
     public void getRoomById_WhenNotExists_ReturnsNotFound() throws Exception {
         mockMvc.perform(get("/api/rooms/99999"))
-                .andExpect(status().isInternalServerError())
-                .andExpect(jsonPath("$.status", is(500)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status", is(404)))
                 .andExpect(jsonPath("$.message", containsString("Quarto não encontrado")));
     }
 }
