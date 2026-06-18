@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import com.example.demo.model.enums.ReservationStatus;
+import com.example.demo.exception.BusinessValidationException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -124,5 +125,19 @@ public class Reservation {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public void doCheckIn() {
+        if (this.status != ReservationStatus.SCHEDULED) {
+            throw new BusinessValidationException("Check-in can only be made for 'Scheduled' reservations");
+        }
+        this.status = ReservationStatus.IN_PROGRESS;
+    }
+
+    public void doCheckOut() {
+        if (this.status != ReservationStatus.IN_PROGRESS) {
+            throw new BusinessValidationException("Check-out can only be made for 'Checked-in' reservations.");
+        }
+        this.status = ReservationStatus.COMPLETED;
     }
 }
