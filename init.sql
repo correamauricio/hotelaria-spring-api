@@ -26,6 +26,7 @@ CREATE TABLE reservation (
                               expected_check_in_date DATE NOT NULL,
                               expected_check_out_date DATE NOT NULL,
                               applied_daily_rate DECIMAL(10, 2) NOT NULL COMMENT 'Locks the price at the time of booking',
+                              total_amount DECIMAL(10, 2) COMMENT 'Total calculated amount for the stay',
                               status ENUM('SCHEDULED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED') DEFAULT 'SCHEDULED',
                               notes TEXT,
                               created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -81,21 +82,21 @@ INSERT INTO room (room_number, category, bed_count, base_daily_rate, status) VAL
 -- 3. Inserindo Reservas (Reservations)
 -- As datas e taxas foram baseadas nos quartos acima
 -- --------------------------------------------------------
-INSERT INTO reservation (guest_id, room_id, expected_check_in_date, expected_check_out_date, applied_daily_rate, status, notes) VALUES
+INSERT INTO reservation (guest_id, room_id, expected_check_in_date, expected_check_out_date, applied_daily_rate, total_amount, status, notes) VALUES
 -- Reserva 1: Já finalizada (Checked-out)
-(1, 1, '2023-10-01', '2023-10-05', 145.00, 'COMPLETED', 'Hóspede pediu travesseiros extras.'),
+(1, 1, '2023-10-01', '2023-10-05', 145.00, 580.00, 'COMPLETED', 'Hóspede pediu travesseiros extras.'),
 
 -- Reserva 2: Em andamento (Checked-in) - Quarto 202 (Ocupado)
-(2, 4, CURRENT_DATE, DATE_ADD(CURRENT_DATE, INTERVAL 3 DAY), 280.00, 'IN_PROGRESS', 'Late check-out solicitado para as 14h.'),
+(2, 4, CURRENT_DATE, DATE_ADD(CURRENT_DATE, INTERVAL 3 DAY), 280.00, 840.00, 'IN_PROGRESS', 'Late check-out solicitado para as 14h.'),
 
 -- Reserva 3: Futura (Scheduled)
-(3, 3, DATE_ADD(CURRENT_DATE, INTERVAL 10 DAY), DATE_ADD(CURRENT_DATE, INTERVAL 15 DAY), 220.00, 'SCHEDULED', 'Promoção de aniversário aplicada.'),
+(3, 3, DATE_ADD(CURRENT_DATE, INTERVAL 10 DAY), DATE_ADD(CURRENT_DATE, INTERVAL 15 DAY), 220.00, 1100.00, 'SCHEDULED', 'Promoção de aniversário aplicada.'),
 
 -- Reserva 4: Em andamento (Checked-in) - Quarto 301 (Ocupado)
-(4, 5, CURRENT_DATE, DATE_ADD(CURRENT_DATE, INTERVAL 2 DAY), 450.00, 'IN_PROGRESS', 'Hóspede com restrição alimentar (sem glúten).'),
+(4, 5, CURRENT_DATE, DATE_ADD(CURRENT_DATE, INTERVAL 2 DAY), 450.00, 900.00, 'IN_PROGRESS', 'Hóspede com restrição alimentar (sem glúten).'),
 
 -- Reserva 5: Cancelada (Cancelled)
-(5, 6, '2023-11-20', '2023-11-25', 850.00, 'CANCELLED', 'Cancelado devido a problemas de saúde.');
+(5, 6, '2023-11-20', '2023-11-25', 850.00, 4250.00, 'CANCELLED', 'Cancelado devido a problemas de saúde.');
 
 -- --------------------------------------------------------
 -- 4. Inserindo Consumos (Room Charges)
