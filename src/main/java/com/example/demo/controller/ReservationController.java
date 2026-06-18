@@ -22,20 +22,20 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<ReservationResponseDTO> createReservation(@RequestBody ReservationRequestDTO newReservationDTO){
+    public ResponseEntity<ReservationResponseDTO> createReservation(@jakarta.validation.Valid @RequestBody ReservationRequestDTO newReservationDTO){
         Reservation savedReservation = reservationService.createReservation(newReservationDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ReservationResponseDTO(savedReservation));
     }
 
     @PostMapping("/{id}/checkin")
     public ResponseEntity<ReservationResponseDTO> doCheckIn(@PathVariable Long id){
-        Reservation updateReservation = reservationService.DoCheckIn(id);
+        Reservation updateReservation = reservationService.doCheckIn(id);
         return ResponseEntity.ok(new ReservationResponseDTO(updateReservation));
     }
 
     @PostMapping("/{id}/checkout")
     public ResponseEntity<ReservationResponseDTO> doCheckOut(@PathVariable Long id){
-        Reservation updateReservation = reservationService.DoCheckOut(id);
+        Reservation updateReservation = reservationService.doCheckOut(id);
         return ResponseEntity.ok(new ReservationResponseDTO(updateReservation));
     }
 
