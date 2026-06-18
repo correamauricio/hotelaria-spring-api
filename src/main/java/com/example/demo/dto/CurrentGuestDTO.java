@@ -1,13 +1,11 @@
 package com.example.demo.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;
 
 public class CurrentGuestDTO {
     
     private String name;
     
-    @JsonProperty("checkout_date")
     private LocalDate checkoutDate;
 
     public CurrentGuestDTO() {
