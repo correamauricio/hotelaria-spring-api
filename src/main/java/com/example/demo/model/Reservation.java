@@ -14,11 +14,13 @@ public class Reservation {
     @Column(name = "reservation_id")
     private Long id;
 
-    @Column(name = "guest_id", nullable = false)
-    private int guestId;
+    @ManyToOne
+    @JoinColumn(name = "guest_id", nullable = false)
+    private Guest guest;
 
-    @Column(name = "room_id",nullable = false)
-    private int roomId;
+    @ManyToOne
+    @JoinColumn(name = "room_id", nullable = false)
+    private Room room;
 
     @Column(name = "expected_check_in_date", nullable = false)
     private LocalDate expectedCheckInDate;
@@ -28,6 +30,9 @@ public class Reservation {
 
     @Column(name = "applied_daily_rate", nullable = false)
     private BigDecimal appliedDailyRate;
+
+    @Column(name = "total_amount")
+    private BigDecimal totalAmount;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -39,12 +44,13 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(int guestId, int roomId, LocalDate expectedCheckInDate, LocalDate expectedCheckOutDate, BigDecimal appliedDailyRate, String notes) {
-        this.guestId = guestId;
-        this.roomId = roomId;
+    public Reservation(Guest guest, Room room, LocalDate expectedCheckInDate, LocalDate expectedCheckOutDate, BigDecimal appliedDailyRate, BigDecimal totalAmount, String notes) {
+        this.guest = guest;
+        this.room = room;
         this.expectedCheckInDate = expectedCheckInDate;
         this.expectedCheckOutDate = expectedCheckOutDate;
         this.appliedDailyRate = appliedDailyRate;
+        this.totalAmount = totalAmount;
         this.notes = notes;
     }
 
@@ -56,20 +62,20 @@ public class Reservation {
         this.id = id;
     }
 
-    public int getGuestId() {
-        return guestId;
+    public Guest getGuest() {
+        return guest;
     }
 
-    public void setGuestId(int guestId) {
-        this.guestId = guestId;
+    public void setGuest(Guest guest) {
+        this.guest = guest;
     }
 
-    public int getRoomId() {
-        return roomId;
+    public Room getRoom() {
+        return room;
     }
 
-    public void setRoomId(int roomId) {
-        this.roomId = roomId;
+    public void setRoom(Room room) {
+        this.room = room;
     }
 
     public LocalDate getExpectedCheckInDate() {
@@ -94,6 +100,14 @@ public class Reservation {
 
     public void setAppliedDailyRate(BigDecimal appliedDailyRate) {
         this.appliedDailyRate = appliedDailyRate;
+    }
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     public ReservationStatus getStatus() {
