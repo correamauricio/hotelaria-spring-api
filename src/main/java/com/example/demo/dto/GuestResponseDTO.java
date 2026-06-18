@@ -1,8 +1,6 @@
 package com.example.demo.dto;
 
 import com.example.demo.model.Guest;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.time.LocalDate;
 
 public class GuestResponseDTO {
@@ -12,7 +10,6 @@ public class GuestResponseDTO {
     private String cpf;
     private String email;
 
-    @JsonProperty("birth_date")
     private LocalDate birthDate;
 
     public GuestResponseDTO() {

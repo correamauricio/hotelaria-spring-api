@@ -1,7 +1,6 @@
 package com.example.demo.dto;
 
 import com.example.demo.validation.MinimumAge;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -30,7 +29,6 @@ public class GuestRequestDTO {
 
     @NotNull(message = "Birth date is required")
     @MinimumAge(value = 18, message = "Guest must be at least 18 years old")
-    @JsonProperty("birth_date")
     private LocalDate birthDate;
 
     public GuestRequestDTO() {

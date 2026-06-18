@@ -1,24 +1,18 @@
 package com.example.demo.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class ReservationRequestDTO {
 
-    @JsonProperty("guest_id")
     private Long guestId;
 
-    @JsonProperty("room_id")
     private Long roomId;
 
-    @JsonProperty("checkin_date")
     private LocalDate checkinDate;
 
-    @JsonProperty("checkout_date")
     private LocalDate checkoutDate;
 
-    @JsonProperty("total_amount")
     private BigDecimal totalAmount;
 
     public Long getGuestId() {
