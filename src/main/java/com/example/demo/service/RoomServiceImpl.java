@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.RoomSummaryDTO;
 import com.example.demo.dto.RoomDetailsDTO;
 import com.example.demo.dto.CurrentGuestDTO;
 import com.example.demo.model.Room;
@@ -28,7 +27,7 @@ public class RoomServiceImpl implements RoomService {
         this.reservationRepository = reservationRepository;
     }
 
-    public List<RoomSummaryDTO> getAllRooms(String status) {
+    public List<RoomDetailsDTO> getAllRooms(String status) {
         List<Room> rooms;
         if (status != null && !status.trim().isEmpty()) {
             try {
@@ -42,7 +41,7 @@ public class RoomServiceImpl implements RoomService {
         }
 
         return rooms.stream()
-                .map(room -> new RoomSummaryDTO(room.getId(), room.getNumber(), room.getStatus()))
+                .map(this::mapToRoomDetails)
                 .collect(Collectors.toList());
     }
 
@@ -50,7 +49,11 @@ public class RoomServiceImpl implements RoomService {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Quarto não encontrado"));
 
-        RoomDetailsDTO dto = new RoomDetailsDTO(room.getId(), room.getNumber(), room.getStatus(), room.getBedCount());
+        return mapToRoomDetails(room);
+    }
+    
+    private RoomDetailsDTO mapToRoomDetails(Room room) {
+        RoomDetailsDTO dto = new RoomDetailsDTO(room.getId(), room.getNumber(), room.getStatus(), room.getBedCount(), room.getBaseDailyRate());
 
         if (room.getStatus() == RoomStatus.OCCUPIED) {
             Optional<Reservation> reservationOpt = reservationRepository.findFirstByRoomIdAndStatus(room.getId(), ReservationStatus.IN_PROGRESS);

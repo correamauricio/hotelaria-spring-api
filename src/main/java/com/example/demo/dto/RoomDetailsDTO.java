@@ -1,6 +1,8 @@
 package com.example.demo.dto;
 
 import com.example.demo.model.enums.RoomStatus;
+import java.math.BigDecimal;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RoomDetailsDTO {
     private Long id;
@@ -9,15 +11,19 @@ public class RoomDetailsDTO {
     
     private Integer bedCount;
     
+    @JsonProperty("base_daily_rate")
+    private BigDecimal baseDailyRate;
+    
     private CurrentGuestDTO currentGuest;
 
     public RoomDetailsDTO() {}
 
-    public RoomDetailsDTO(Long id, String number, RoomStatus status, Integer bedCount) {
+    public RoomDetailsDTO(Long id, String number, RoomStatus status, Integer bedCount, BigDecimal baseDailyRate) {
         this.id = id;
         this.number = number;
         this.status = status;
         this.bedCount = bedCount;
+        this.baseDailyRate = baseDailyRate;
         this.currentGuest = null;
     }
 
@@ -59,5 +65,13 @@ public class RoomDetailsDTO {
 
     public void setCurrentGuest(CurrentGuestDTO currentGuest) {
         this.currentGuest = currentGuest;
+    }
+
+    public BigDecimal getBaseDailyRate() {
+        return baseDailyRate;
+    }
+
+    public void setBaseDailyRate(BigDecimal baseDailyRate) {
+        this.baseDailyRate = baseDailyRate;
     }
 }
