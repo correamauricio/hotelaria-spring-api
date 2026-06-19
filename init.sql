@@ -71,9 +71,9 @@ INSERT INTO guest (full_name, document_number, birth_date, email) VALUES
 -- 2. Inserindo Quartos (Rooms)
 -- --------------------------------------------------------
 INSERT INTO room (room_number, category, bed_count, base_daily_rate, status) VALUES
-                                                                       ('101', 'Standard Room - 1 Queen bed', 1, 150.00, 'AVAILABLE'),
+                                                                       ('101', 'Standard Room - 1 Queen bed', 1, 150.00, 'OCCUPIED'),
                                                                        ('102', 'Standard Room - 2 Twin beds', 2, 140.00, 'MAINTENANCE'),
-                                                                       ('201', 'Deluxe Room - 1 King bed', 1, 250.00, 'AVAILABLE'),
+                                                                       ('201', 'Deluxe Room - 1 King bed', 1, 250.00, 'OCCUPIED'),
                                                                        ('202', 'Deluxe Room - 1 King bed + Balcony', 1, 280.00, 'OCCUPIED'),
                                                                        ('301', 'Premium Suite - 2 beds + Kitchen', 2, 450.00, 'OCCUPIED'),
                                                                        ('302', 'Presidential Suite', 2, 900.00, 'AVAILABLE');
@@ -96,7 +96,13 @@ INSERT INTO reservation (guest_id, room_id, expected_check_in_date, expected_che
 (4, 5, CURRENT_DATE, DATE_ADD(CURRENT_DATE, INTERVAL 2 DAY), 450.00, 900.00, 'IN_PROGRESS', 'Hóspede com restrição alimentar (sem glúten).'),
 
 -- Reserva 5: Cancelada (Cancelled)
-(5, 6, '2023-11-20', '2023-11-25', 850.00, 4250.00, 'CANCELLED', 'Cancelado devido a problemas de saúde.');
+(5, 6, '2023-11-20', '2023-11-25', 850.00, 4250.00, 'CANCELLED', 'Cancelado devido a problemas de saúde.'),
+
+-- Reserva 6: Em andamento (Checked-in) - Saída hoje - Quarto 101 (Ocupado)
+(1, 1, DATE_SUB(CURRENT_DATE, INTERVAL 2 DAY), CURRENT_DATE, 150.00, 300.00, 'IN_PROGRESS', 'Check-out hoje. Solicitou táxi.'),
+
+-- Reserva 7: Em andamento (Checked-in) - Saída hoje - Quarto 201 (Ocupado)
+(5, 3, DATE_SUB(CURRENT_DATE, INTERVAL 3 DAY), CURRENT_DATE, 250.00, 750.00, 'IN_PROGRESS', 'Check-out hoje. Consumiu itens do frigobar.');
 
 -- --------------------------------------------------------
 -- 4. Inserindo Consumos (Room Charges)
